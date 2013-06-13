@@ -2,9 +2,7 @@
 
 A thirty line Node.js test runner with support for async tests.
 
-## Sample output
-
-<img src="https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png" style="height: 10px;"/>
+![drawing](https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png)
 
 ## Usage
 
