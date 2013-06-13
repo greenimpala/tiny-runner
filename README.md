@@ -4,17 +4,7 @@ A thirty line Node.js test runner with support for async tests.
 
 ## Sample output
 
-```bash
-$ ~/dev/project$ node test.js
-✓ Passed: exports as a function
-✓ Passed: can create basic prototypal methods
-✖ Failed: executes constructor on instantiation
-
-	AssertionError: false == true
-
-✓ Passed: executes constructor in scope of class
-✓ Passed: passes intantiation arguments to constructor function
-```
+<img src="https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png" style="height: 10px;"/>
 
 ## Usage
 
