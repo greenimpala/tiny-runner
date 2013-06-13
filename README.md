@@ -7,8 +7,13 @@ A thirty line Node.js test runner with support for async tests.
 ## Usage
 
 ```js
+$ node <filename.js>
+```
+
+Where `filename.js` registers tests in the following format:
+
+```js
 var test = require('tiny-runner');
-var assert = require('assert');
 
 test('can add two numbers', function () {
 	var val = add(1, 1);
@@ -30,9 +35,4 @@ test('can add two numbers via server', function () {
 
 	return def.promise;
 });
-
-## Run
-
-```js
-$ node tests.js
 ```
