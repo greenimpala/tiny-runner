@@ -1,5 +1,5 @@
 var tests = [], scheduled, failed;
-function runner (i, promise) {
+function runLoop (i, promise) {
 	i = i || 0;
 	if (promise) {
 		promise.then(function (fn) {
@@ -25,6 +25,6 @@ module.exports = function (name, fn) {
 	tests.push({ name: name, fn: fn });
 	if (!scheduled) {
 		scheduled = true;
-		process.nextTick(runner);
+		process.nextTick(runLoop);
 	}
 };
