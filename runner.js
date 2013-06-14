@@ -17,9 +17,9 @@ function runner (i, promise) {
 function run (name, fn) {
 	var promise;
 	try { promise = fn(); } catch (e) { var err = failed = e; }
+	if (promise && !err) return promise;
 	console.log((err ? '\x1B[31m' + '✖ Failed: ' : '\x1B[32m' + '✓ Passed: ') + '\x1B[37m' + name);
 	if (err) console.log('\n\u0009' + err + '\n');
-	return promise;
 }
 module.exports = function (name, fn) {
 	tests.push({ name: name, fn: fn });
