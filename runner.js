@@ -1,4 +1,5 @@
 var tests = [], scheduled, failed;
+
 function runLoop (i, promise) {
 	i = i || 0;
 	if (promise) {
@@ -14,6 +15,7 @@ function runLoop (i, promise) {
 		runner(++i, promise);
 	}
 }
+
 function run (name, fn) {
 	var promise;
 	try { promise = fn(); } catch (e) { var err = failed = e; }
@@ -21,6 +23,7 @@ function run (name, fn) {
 	console.log((err ? '\x1B[31m' + '✖ Failed: ' : '\x1B[32m' + '✓ Passed: ') + '\x1B[37m' + name);
 	if (err) console.log('\n\u0009' + err + '\n');
 }
+
 module.exports = function (name, fn) {
 	tests.push({ name: name, fn: fn });
 	if (!scheduled) {
