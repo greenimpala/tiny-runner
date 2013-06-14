@@ -1,6 +1,6 @@
 # tiny-runner
 
-A thirty line Node.js test runner with support for async tests.
+A tiny test runner with async test support.
 
 ![drawing](https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png)
 
