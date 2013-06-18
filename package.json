@@ -16,5 +16,8 @@
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/st3redstripe/tiny-runner/issues"
+  },
+  "devDependencies": {
+    "sandboxed-module": "*" 
   }
 }
