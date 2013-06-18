@@ -1,6 +1,6 @@
 # tiny-runner
 
-A tiny test runner with async support.
+A tiny test runner with async support. Available on `npm` as `tiny-runner`.
 
 ![drawing](https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png)
 
