@@ -1,4 +1,4 @@
-var tests = [], scheduled, globalFail;
+var tests = [], scheduled, failed;
 
 function runLoop (i, promise) {
 	i = i || 0;
@@ -6,13 +6,13 @@ function runLoop (i, promise) {
 		promise.then(function (fn) {
 			var test = tests[i - 1];
 			run(test.name, fn);
-			runLoop(i);
+			runner(i);
 		});
 	} else {
 		var test = tests[i];
-		if (!test) process.exit(globalFail ? 1 : 0);
+		if (!test) process.exit(failed ? 1 : 0);
 		promise = run(test.name, test.fn);
-		runLoop(++i, promise);
+		runner(++i, promise);
 	}
 }
 
@@ -22,7 +22,7 @@ function run (name, fn) {
 	try {
 		promise = fn();
 	} catch (e) {
-		var err = globalFail = e;
+		var err = failed = e;
 	}
 
 	if (promise && !err) return promise;
