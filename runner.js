@@ -1,7 +1,10 @@
 var bind = require('bind-this');
 var EventEmitter = require('events').EventEmitter;
 
-function Runner (name, fn) {
+function Runner (params) {
+	params = params || {};
+
+	this.timeoutLength = params.timeoutLength || 3000;
 	this.tests = [];
 	this.scheduled = false;
 	this.failed = false;
@@ -16,26 +19,42 @@ Runner.prototype.register = function (name, fn) {
 	});
 };
 
-Runner.prototype.runLoop = function (i, promise) {
-	i = i || 0;
+Runner.prototype.run = function () {
+	this._runLoop(0);
+};
+
+Runner.prototype._runLoop = function (i, promise) {
+	var test;
 
 	if (promise) {
-		promise.then(bind(this, function (fn) {
-			var test = this.tests[i - 1];
-			test.fn = fn || function () {};
-			this._runTest(test);
+		test = this.tests[i - 1];
+		var testTimedOut = false;
 
-			this.runLoop(i);
+		var timeout = setTimeout(bind(this, function () {
+			testTimedOut = true;
+			this._failTest(test);
+			this._runLoop(i);
+		}), this.timeoutLength);
+
+
+		promise.then(bind(this, function (fn) {
+			clearTimeout(timeout);
+
+			if (!testTimedOut) {
+				test.fn = fn || function () {};
+				this._runTest(test);
+				this._runLoop(i);
+			}
 		}));
 	} else {
-		var test = this.tests[i];
+		test = this.tests[i];
 
 		if (!test) {
 			return this._end();
 		}
 
 		promise = this._runTest(test);
-		this.runLoop(++i, promise);
+		this._runLoop(++i, promise);
 	}
 };
 
@@ -45,18 +64,28 @@ Runner.prototype._runTest = function (test) {
 	try {
 		promise = test.fn();
 	} catch (e) {
-		var err = this.failed = e;
+		var err = e;
 	}
 
 	if (promise && !err) {
 		return promise;
 	}
 
-	this.emit('out', (err ? '\x1B[31m' + '✖ Failed: ' : '\x1B[32m' + '✓ Passed: ') + '\x1B[37m' + test.name);
-
 	if (err) {
-		this.emit('out', '\n\u0009' + err + '\n');
+		this._failTest(test);
+	} else {
+		this._passTest(test);
 	}
+};
+
+Runner.prototype._passTest = function (test) {
+	this.emit('out', '\x1B[32m' + '✓ Passed: ' + '\x1B[37m' + test.name);
+};
+
+Runner.prototype._failTest = function (test, err) {
+	this.failed = true;
+	this.emit('out', '\x1B[31m' + '✖ Failed: ' + '\x1B[37m' + test.name);
+	this.emit('out', '\n\u0009' + err + '\n');
 };
 
 Runner.prototype._end = function () {

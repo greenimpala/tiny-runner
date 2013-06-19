@@ -1,8 +1,12 @@
 var bind = require('bind-this');
 var Runner = require('./Runner');
 
-var runner = new Runner();
+var runner = new Runner({
+	"timeoutLength": process.argv[2]
+});
 var scheduled;
+
+process.stdin.resume();
 
 runner.on('end', function (failed, tests) {
 	process.exit(failed ? 1 : 0);
@@ -15,6 +19,6 @@ module.exports = function () {
 
 	if (!scheduled) {
 		scheduled = true;
-		process.nextTick(bind(runner, 'runLoop'));
+		process.nextTick(bind(runner, 'run'));
 	}
 };

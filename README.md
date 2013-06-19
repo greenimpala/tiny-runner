@@ -1,16 +1,22 @@
 # tiny-runner
 
-A tiny test runner with async support. Available on `npm` as `tiny-runner`.
+A tiny test runner with async support.
 
 ![drawing](https://raw.github.com/st3redstripe/tiny-runner/assets/screen.png)
 
-## Usage
+## Installation
 
-```js
-$ node <filename.js>
+```bash
+$ npm install tiny-runner
 ```
 
-Where `filename.js` registers tests in the following format:
+## Usage
+
+```bash
+$ node <filename>
+```
+
+Test files should register tests in the following format.
 
 ```js
 var test = require('tiny-runner');
@@ -35,4 +41,19 @@ test('can add two numbers via server', function () {
 
 	return def.promise;
 });
+```
+## Options
+
+Pass a timeout argument to override the default test timeout.
+
+```bash
+$ node tests 1000
+```
+
+## Tests
+
+Test runners need tests too.
+
+```bash
+npm test
 ```
