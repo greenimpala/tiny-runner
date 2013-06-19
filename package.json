@@ -18,6 +18,7 @@
     "url": "https://github.com/st3redstripe/tiny-runner/issues"
   },
   "dependencies": {
-    "bind-this": "*"
+    "bind-this": "*",
+    "q": "*"
   }
 }
