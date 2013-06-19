@@ -16,7 +16,7 @@ $ npm install tiny-runner
 $ node <filename>
 ```
 
-Test files should register tests in the following format.
+Test files should register tests to the register function by passing a name and test callback. The runner will execute registered tests on the next tick of the event loop. You may use any standard assertion library.
 
 ```js
 var test = require('tiny-runner');
