@@ -27,7 +27,7 @@ test('can add two numbers', function () {
 });
 ```
 
-For async tests return a Promise/A compatible promise and resolve it with an assertion callback.
+For deferred tests return a Promise/A compatible object. Your test should resolve the promise when done. You may also pass a callback when resolving the promise if you need to make any post-async assertions.
 
 ```js
 test('can add two numbers via server', function () {
