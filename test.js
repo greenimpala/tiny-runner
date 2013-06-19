@@ -1,60 +1,119 @@
-var test = require('./main');
 var assert = require('assert');
+var Q = require('Q');
+var test = require('./main');
 var Runner = require('./Runner');
 
 test('can register tests', function () {
 	var runner = new Runner();
 
-	assert.equal(0, runner.getTests().length);
-	runner.register("test", function () {});
-	assert.equal(1, runner.getTests().length);
+	runner.register("test 1", function () {});
+	runner.register("test 2", function () {});
+});
+
+test('emits end event when tests complete', function () {
+	var def = Q.defer();
+	var runner = new Runner();
+
+	runner.on('end', def.resolve);
+	runner.runLoop();
+
+	return def.promise;
 });
 
 test('can pass tests', function () {
-	
+	var def = Q.defer();
+	var runner = new Runner();
+
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(!failed);
+		});
+	});
+
+	runner.register("test", function () {});
+	runner.runLoop();
+
+	return def.promise;
 });
 
-// test('can fail tests', function () {
-// 	assert(false);
-// });
+test('can fail tests', function () {
+	var def = Q.defer();
+	var runner = new Runner();
 
-// test('blocks run loop when returning promises', function () {
-// 	var promise = {
-// 		then: function (fn) {
-// 			// Fake resolve and fail test
-// 			process.nextTick(function () {
-// 				fn(function () {
-// 					assert(true);
-// 				});
-// 			});
-// 		}
-// 	};
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(failed);
+		});
+	});
 
-// 	return promise;
-// });
+	runner.register("test", function () {
+		throw new Error();
+	});
+	runner.runLoop();
 
-// test('can pass test with promise API', function () {
-// 	var promise = {
-// 		then: function (fn) {
-// 			// Fake resolve and pass test
-// 			fn(function () {
-// 				assert(true);
-// 			});
-// 		}
-// 	};
+	return def.promise;
+});
 
-// 	return promise;
-// });
+test('blocks runner until async test is resolved', function () {
+	var def = Q.defer();
+	var testDef = Q.defer();
+	var runner = new Runner();
 
-// test('can fail test with promise API', function () {
-// 	var promise = {
-// 		then: function (fn) {
-// 			// Fake resolve and fail test
-// 			fn(function () {
-// 				assert(false);
-// 			});
-// 		}
-// 	};
+	runner.register("test", function () {
+		return testDef.promise;
+	});
+	runner.runLoop();
 
-// 	return promise;
-// });
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(!failed);
+		});
+	});
+
+	testDef.resolve();
+	return def.promise;
+});
+
+test('executes assertions if async test resolved with a failing function', function () {
+	var def = Q.defer();
+	var testDef = Q.defer();
+	var runner = new Runner();
+
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(failed);
+		});
+	});
+
+	runner.register("test", function () {
+		return testDef.promise;
+	});
+	runner.runLoop();
+
+	testDef.resolve(function () {
+		throw new Error();
+	});
+	return def.promise;
+});
+
+test('executes assertions if async test resolved with a succesful function', function () {
+	var def = Q.defer();
+	var testDef = Q.defer();
+	var runner = new Runner();
+
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(!failed);
+		});
+	});
+
+	runner.register("test", function () {
+		return testDef.promise;
+	});
+	runner.runLoop();
+
+	testDef.resolve(function () {
+
+	});
+	return def.promise;
+});
