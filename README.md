@@ -42,6 +42,11 @@ test('can add two numbers via server', function () {
 	return def.promise;
 });
 ```
+
+## Before / After
+
+Use `test.beforeEach(fn)` and `test.afterEach(fn)` to schedule setup and teardown decorators. The methods will be ran until another is assigned - you may pass `null` to clear an existing decorator.
+
 ## Options
 
 Pass a timeout argument to override the default test timeout.

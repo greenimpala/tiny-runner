@@ -1,7 +1,7 @@
 var assert = require('assert');
 var Q = require('Q');
 var test = require('./main');
-var Runner = require('./Runner');
+var Runner = require('./lib/Runner');
 
 test('can register tests', function () {
 	var runner = new Runner();
@@ -140,6 +140,72 @@ test('fails test if promise does not resolve timely', function () {
 	});
 
 	runner.run();
+
+	return def.promise;
+});
+
+test('can run beforeEach and afterEach function for sync test', function () {
+	var runner = new Runner();
+	var stack = [];
+	var def = Q.defer();
+
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(!failed);
+			assert.equal(3, stack.length);
+			assert.equal('foo', stack[0]);
+			assert.equal('bar', stack[1]);
+			assert.equal('baz', stack[2]);
+		});
+	});
+
+	runner.register.beforeEach(function () {
+		stack.push('foo');
+	});
+
+	runner.register.afterEach(function () {
+		stack.push('baz');
+	});
+
+	runner.register('test', function () {
+		stack.push('bar');
+	});
+	runner.run();
+
+	return def.promise;
+});
+
+test('can run beforeEach and afterEach function for async test', function () {
+	var runner = new Runner();
+	var stack = [];
+	var def = Q.defer();
+	var testDef = Q.defer();
+
+	runner.on('end', function (failed) {
+		def.resolve(function () {
+			assert(!failed);
+			assert.equal(3, stack.length);
+			assert.equal('foo', stack[0]);
+			assert.equal('bar', stack[1]);
+			assert.equal('baz', stack[2]);
+		});
+	});
+
+	runner.register.beforeEach(function () {
+		stack.push('foo');
+	});
+
+	runner.register.afterEach(function () {
+		stack.push('baz');
+	});
+
+	runner.register('test', function () {
+		stack.push('bar');
+		return testDef.promise;
+	});
+
+	runner.run();
+	testDef.resolve();
 
 	return def.promise;
 });

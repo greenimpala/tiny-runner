@@ -1,5 +1,5 @@
 var bind = require('bind-this');
-var Runner = require('./Runner');
+var Runner = require('./lib/Runner');
 
 var runner = new Runner({
 	"timeoutLength": process.argv[2]
