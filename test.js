@@ -1,4 +1,4 @@
-var tinyrunner = require('./main');
+var runner = require('./main');
 var assert = require('assert');
 var Q = require('Q');
 var Runner = require('./lib/Runner');

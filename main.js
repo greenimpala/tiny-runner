@@ -25,8 +25,8 @@ global.it = function () {
 
 global.beforeEach = function () {
 	runner.beforeEach.apply(runner, arguments);
-}
+};
 
 global.afterEach = function () {
 	runner.afterEach.apply(runner, arguments);
-}
+};
