@@ -14,7 +14,7 @@ runner.on('end', function (failed, tests) {
 
 runner.on('out', console.log);
 
-module.exports = function () {
+global.it = function () {
 	runner.register.apply(runner, arguments);
 
 	if (!scheduled) {
@@ -22,3 +22,11 @@ module.exports = function () {
 		process.nextTick(bind(runner, 'run'));
 	}
 };
+
+global.beforeEach = function () {
+	runner.beforeEach.apply(runner, arguments);
+}
+
+global.afterEach = function () {
+	runner.afterEach.apply(runner, arguments);
+}

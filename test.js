@@ -1,16 +1,16 @@
+var tinyrunner = require('./main');
 var assert = require('assert');
 var Q = require('Q');
-var test = require('./main');
 var Runner = require('./lib/Runner');
 
-test('can register tests', function () {
+it('can register tests', function () {
 	var runner = new Runner();
 
 	runner.register("test 1", function () {});
 	runner.register("test 2", function () {});
 });
 
-test('emits end event when tests complete', function () {
+it('emits end event when tests complete', function () {
 	var def = Q.defer();
 	var runner = new Runner();
 
@@ -20,7 +20,7 @@ test('emits end event when tests complete', function () {
 	return def.promise;
 });
 
-test('can pass tests', function () {
+it('can pass tests', function () {
 	var def = Q.defer();
 	var runner = new Runner();
 
@@ -37,7 +37,7 @@ test('can pass tests', function () {
 	return def.promise;
 });
 
-test('can fail tests', function () {
+it('can fail tests', function () {
 	var def = Q.defer();
 	var runner = new Runner();
 
@@ -56,7 +56,7 @@ test('can fail tests', function () {
 	return def.promise;
 });
 
-test('blocks runner until async test is resolved', function () {
+it('blocks runner until async test is resolved', function () {
 	var def = Q.defer();
 	var testDef = Q.defer();
 	var runner = new Runner();
@@ -76,7 +76,7 @@ test('blocks runner until async test is resolved', function () {
 	return def.promise;
 });
 
-test('executes assertions if async test resolved with a failing function', function () {
+it('executes assertions if async test resolved with a failing function', function () {
 	var def = Q.defer();
 	var testDef = Q.defer();
 	var runner = new Runner();
@@ -99,7 +99,7 @@ test('executes assertions if async test resolved with a failing function', funct
 	return def.promise;
 });
 
-test('executes assertions if async test resolved with a succesful function', function () {
+it('executes assertions if async test resolved with a succesful function', function () {
 	var def = Q.defer();
 	var testDef = Q.defer();
 	var runner = new Runner();
@@ -122,7 +122,7 @@ test('executes assertions if async test resolved with a succesful function', fun
 	return def.promise;
 });
 
-test('fails test if promise does not resolve timely', function () {
+it('fails test if promise does not resolve timely', function () {
 	var def = Q.defer();
 
 	var runner = new Runner({
@@ -144,7 +144,7 @@ test('fails test if promise does not resolve timely', function () {
 	return def.promise;
 });
 
-test('can run beforeEach and afterEach function for sync test', function () {
+it('can run beforeEach and afterEach function for sync test', function () {
 	var runner = new Runner();
 	var stack = [];
 	var def = Q.defer();
@@ -159,11 +159,11 @@ test('can run beforeEach and afterEach function for sync test', function () {
 		});
 	});
 
-	runner.register.beforeEach(function () {
+	runner.beforeEach(function () {
 		stack.push('foo');
 	});
 
-	runner.register.afterEach(function () {
+	runner.afterEach(function () {
 		stack.push('baz');
 	});
 
@@ -175,7 +175,7 @@ test('can run beforeEach and afterEach function for sync test', function () {
 	return def.promise;
 });
 
-test('can run beforeEach and afterEach function for async test', function () {
+it('can run beforeEach and afterEach function for async test', function () {
 	var runner = new Runner();
 	var stack = [];
 	var def = Q.defer();
@@ -191,11 +191,11 @@ test('can run beforeEach and afterEach function for async test', function () {
 		});
 	});
 
-	runner.register.beforeEach(function () {
+	runner.beforeEach(function () {
 		stack.push('foo');
 	});
 
-	runner.register.afterEach(function () {
+	runner.afterEach(function () {
 		stack.push('baz');
 	});
 

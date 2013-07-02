@@ -1,6 +1,6 @@
 {
   "name": "tiny-runner",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A tiny test runner with async support",
   "main": "main.js",
   "scripts": {
